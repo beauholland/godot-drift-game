@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1stagesel0001"]
+
+[ext_resource type="Script" path="res://scripts/stage_select.gd" id="1_stagesel"]
+
+[node name="StageSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_stagesel")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 40.0
+offset_right = 300.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 36
+text = "Choose Stage"
+horizontal_alignment = 1
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -160.0
+offset_right = 240.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StageList" type="ItemList" parent="Panel/VBox"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+auto_height = true
+
+[node name="ButtonRow" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="Panel/VBox/ButtonRow"]
+custom_minimum_size = Vector2(140, 40)
+layout_mode = 2
+text = "Back"
+
+[node name="StartButton" type="Button" parent="Panel/VBox/ButtonRow"]
+custom_minimum_size = Vector2(140, 40)
+layout_mode = 2
+text = "Start"
+
+[connection signal="item_selected" from="Panel/VBox/StageList" to="." method="_on_stage_list_item_selected"]
+[connection signal="pressed" from="Panel/VBox/ButtonRow/BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Panel/VBox/ButtonRow/StartButton" to="." method="_on_start_pressed"]

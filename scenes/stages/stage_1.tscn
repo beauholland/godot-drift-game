@@ -1,0 +1,190 @@
+[gd_scene load_steps=10 format=3 uid="uid://b1stage1scn001"]
+
+[ext_resource type="Script" path="res://scripts/stage_1.gd" id="1_stage1"]
+[ext_resource type="PackedScene" uid="uid://b1playercar0001" path="res://scenes/player_car.tscn" id="2_car"]
+
+[sub_resource type="RectangleShape2D" id="shape_outer_top"]
+size = Vector2(1660, 30)
+
+[sub_resource type="RectangleShape2D" id="shape_outer_bottom"]
+size = Vector2(1660, 30)
+
+[sub_resource type="RectangleShape2D" id="shape_outer_left"]
+size = Vector2(30, 1030)
+
+[sub_resource type="RectangleShape2D" id="shape_outer_right"]
+size = Vector2(30, 1030)
+
+[sub_resource type="RectangleShape2D" id="shape_inner"]
+size = Vector2(800, 400)
+
+[sub_resource type="RectangleShape2D" id="shape_finish"]
+size = Vector2(20, 300)
+
+[sub_resource type="RectangleShape2D" id="shape_checkpoint"]
+size = Vector2(1600, 30)
+
+[node name="Stage1" type="Node2D"]
+script = ExtResource("1_stage1")
+
+[node name="Background" type="Polygon2D" parent="."]
+color = Color(0.12, 0.18, 0.13, 1)
+polygon = PackedVector2Array(-1200, -800, 1200, -800, 1200, 800, -1200, 800)
+
+[node name="TrackTop" type="Polygon2D" parent="."]
+color = Color(0.22, 0.23, 0.26, 1)
+polygon = PackedVector2Array(-800, -500, 800, -500, 800, -200, -800, -200)
+
+[node name="TrackBottom" type="Polygon2D" parent="."]
+color = Color(0.22, 0.23, 0.26, 1)
+polygon = PackedVector2Array(-800, 200, 800, 200, 800, 500, -800, 500)
+
+[node name="TrackLeft" type="Polygon2D" parent="."]
+color = Color(0.22, 0.23, 0.26, 1)
+polygon = PackedVector2Array(-800, -200, -400, -200, -400, 200, -800, 200)
+
+[node name="TrackRight" type="Polygon2D" parent="."]
+color = Color(0.22, 0.23, 0.26, 1)
+polygon = PackedVector2Array(400, -200, 800, -200, 800, 200, 400, 200)
+
+[node name="InnerIsland" type="Polygon2D" parent="."]
+color = Color(0.18, 0.32, 0.2, 1)
+polygon = PackedVector2Array(-400, -200, 400, -200, 400, 200, -400, 200)
+
+[node name="StartLine" type="Polygon2D" parent="."]
+color = Color(0.95, 0.95, 0.95, 1)
+polygon = PackedVector2Array(-610, -500, -590, -500, -590, -200, -610, -200)
+
+[node name="CheckpointLine" type="Polygon2D" parent="."]
+color = Color(1, 0.85, 0.25, 0.8)
+polygon = PackedVector2Array(-800, 340, 800, 340, 800, 360, -800, 360)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="OuterTop" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, -515)
+shape = SubResource("shape_outer_top")
+
+[node name="OuterTopVis" type="Polygon2D" parent="Walls"]
+color = Color(0.08, 0.09, 0.12, 1)
+polygon = PackedVector2Array(-830, -530, 830, -530, 830, -500, -830, -500)
+
+[node name="OuterBottom" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, 515)
+shape = SubResource("shape_outer_bottom")
+
+[node name="OuterBottomVis" type="Polygon2D" parent="Walls"]
+color = Color(0.08, 0.09, 0.12, 1)
+polygon = PackedVector2Array(-830, 500, 830, 500, 830, 530, -830, 530)
+
+[node name="OuterLeft" type="CollisionShape2D" parent="Walls"]
+position = Vector2(-815, 0)
+shape = SubResource("shape_outer_left")
+
+[node name="OuterLeftVis" type="Polygon2D" parent="Walls"]
+color = Color(0.08, 0.09, 0.12, 1)
+polygon = PackedVector2Array(-830, -515, -800, -515, -800, 515, -830, 515)
+
+[node name="OuterRight" type="CollisionShape2D" parent="Walls"]
+position = Vector2(815, 0)
+shape = SubResource("shape_outer_right")
+
+[node name="OuterRightVis" type="Polygon2D" parent="Walls"]
+color = Color(0.08, 0.09, 0.12, 1)
+polygon = PackedVector2Array(800, -515, 830, -515, 830, 515, 800, 515)
+
+[node name="InnerWall" type="CollisionShape2D" parent="Walls"]
+shape = SubResource("shape_inner")
+
+[node name="FinishLine" type="Area2D" parent="."]
+position = Vector2(-600, -350)
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="FinishShape" type="CollisionShape2D" parent="FinishLine"]
+shape = SubResource("shape_finish")
+
+[node name="Checkpoint" type="Area2D" parent="."]
+position = Vector2(0, 350)
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+
+[node name="CheckpointShape" type="CollisionShape2D" parent="Checkpoint"]
+shape = SubResource("shape_checkpoint")
+
+[node name="PlayerCar" parent="." instance=ExtResource("2_car")]
+position = Vector2(-680, -350)
+rotation = 0.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-680, -350)
+zoom = Vector2(0.85, 0.85)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="HUDRoot" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="TopBar" type="HBoxContainer" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 52.0
+grow_horizontal = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="HUD/HUDRoot/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Speed: 0"
+
+[node name="DriftLabel" type="Label" parent="HUD/HUDRoot/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = ""
+
+[node name="ScoreLabel" type="Label" parent="HUD/HUDRoot/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Score: 0"
+
+[node name="TimeLabel" type="Label" parent="HUD/HUDRoot/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Time: 00:00.00"
+
+[node name="LapLabel" type="Label" parent="HUD/HUDRoot/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Checkpoint: —"
+
+[node name="HintLabel" type="Label" parent="HUD/HUDRoot"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -36.0
+offset_right = -16.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "Arrows / WASD: Drive   Space: Drift   Esc: Menu   |   Cross yellow checkpoint then return to white start line to finish"
+horizontal_alignment = 1
+modulate = Color(1, 1, 1, 0.6)
