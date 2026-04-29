@@ -8,11 +8,15 @@ signal drift_state_changed(is_drifting: bool)
 const STEER_SPEED_RAMP: float = 60.0
 const ROLL_FRICTION: float = 0.6
 const BRAKE_TO_REVERSE_RATIO: float = 0.5
+const TURBO_TRIGGER_RATIO: float = 0.95
+const TURBO_RELEASE_RATIO: float = 0.80
 
 var is_drifting: bool = false
+var _at_top_speed: bool = false
 
 @onready var body: Polygon2D = $Body
 @onready var trim: Polygon2D = $Trim
+@onready var car_audio: Node = $CarAudio
 
 func _ready() -> void:
 	if car_data:
@@ -75,6 +79,23 @@ func _physics_process(delta: float) -> void:
 	if can_drift != is_drifting:
 		is_drifting = can_drift
 		drift_state_changed.emit(is_drifting)
+
+	_update_audio(absf(input_throttle))
+
+func _update_audio(throttle_amount: float) -> void:
+	if not car_audio or not car_data:
+		return
+	var ratio: float = clampf(velocity.length() / car_data.max_speed, 0.0, 1.0)
+	car_audio.set_engine_state(ratio, throttle_amount)
+	var drift_amt: float = 0.0
+	if is_drifting:
+		drift_amt = clampf(get_slip_angle() / 0.5, 0.0, 1.0)
+	car_audio.set_drift_intensity(drift_amt)
+	if not _at_top_speed and ratio >= TURBO_TRIGGER_RATIO:
+		_at_top_speed = true
+		car_audio.trigger_turbo_blowoff()
+	elif _at_top_speed and ratio < TURBO_RELEASE_RATIO:
+		_at_top_speed = false
 
 func get_speed() -> float:
 	return velocity.length()
